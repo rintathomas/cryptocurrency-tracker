@@ -1,0 +1,8 @@
+{
+  "name": "crypto-price-search-history",
+  "version": "1.0.0",
+  "description": "",
+  "dependencies": {
+    "aws-sdk": "^2.1626.0"
+  }
+}

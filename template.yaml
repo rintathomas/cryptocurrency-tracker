@@ -1,0 +1,60 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  CryptoPriceEmailFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: cryptoPriceEmailService/index.handler
+      Runtime: nodejs14.x
+      Environment:
+        Variables:
+          EMAIL_ADDRESS: your_verified_email@example.com
+      Events:
+        EmailCryptoPriceApi:
+          Type: Api
+          Properties:
+            Path: /crypto-price-email
+            Method: post
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CryptoSearchHistoryTable
+        - Statement:
+            - Effect: Allow
+              Action:
+                - ses:SendEmail
+                - ses:SendRawEmail
+              Resource: '*'
+
+  CryptoPriceSearchHistoryFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: cryptoPriceSearchHistory/index.handler
+      Runtime: nodejs14.x
+      Events:
+        GetSearchHistoryApi:
+          Type: Api
+          Properties:
+            Path: /search-history
+            Method: get
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CryptoSearchHistoryTable
+
+  CryptoSearchHistoryTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: CryptoSearchHistory
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+        - AttributeName: timestamp
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+        - AttributeName: timestamp
+          KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
