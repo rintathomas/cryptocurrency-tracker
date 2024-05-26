@@ -35,7 +35,7 @@ sam build
 sam deploy --guided
 ```
 
-##Endpoints##
+## Endpoints ##
 **Email Crypto Price**:
 
 Path: /email-crypto-price
@@ -54,7 +54,7 @@ Path: /search-history
 Method: GET
 Description: Retrieves the history of cryptocurrency price queries.
 
-##Test Your Endpoints##
+## Test Your Endpoints ##
 
 Use cURL or any HTTP client to test your endpoints:
 
